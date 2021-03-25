@@ -25,7 +25,7 @@ import (
 var (
 	// Config
 	configForce                bool          = true
-	configDebug                bool          = true
+	configDebug                bool          = false
 	configManagedOnly          bool          = false
 	configRunOnce              bool          = false
 	configAllServiceAccount    bool          = false
@@ -140,7 +140,7 @@ func startNamespaceWatcher(k8s *k8sClient) {
 			var err error
 			ns := obj.(*corev1.Namespace)
 			namespace := ns.Name
-			log.Infof("[%s] Namespace discovered", namespace)
+			log.Debugf("[%s] Namespace discovered", namespace)
 			if namespaceIsExcluded(*ns) {
 				log.Infof("[%s] Namespace skipped", namespace)
 			}
