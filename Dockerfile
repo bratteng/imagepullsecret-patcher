@@ -1,5 +1,5 @@
 # build stage
-FROM golang:1.13 as builder
+FROM golang:1.17.1 as builder
 
 ENV GO111MODULE=on
 
@@ -10,13 +10,16 @@ COPY go.sum .
 
 RUN go mod download
 
-COPY . .
+COPY config_helper.go .
+COPY main.go .
+COPY secret.go .
+COPY service_account.go .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /go/bin/imagepullsecret-patcher
 
 # final stage
 FROM scratch
 
-COPY --from=builder /app/imagepullsecret-patcher /app/
+COPY --from=builder /go/bin/imagepullsecret-patcher /
 
-ENTRYPOINT ["/app/imagepullsecret-patcher"]
+CMD ["/imagepullsecret-patcher"]
