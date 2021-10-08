@@ -46,3 +46,40 @@ jobs:
       -
         name: Test and Benchmark
         run: go test --bench --benchmem -v
+
+  build:
+    runs-on: ${{ matrix.OS }}
+    strategy:
+      fail-fast: false
+      matrix:
+        OS:
+          - ubuntu-20.04
+        GOOS:
+          - linux
+        GOARCH:
+          - amd64
+          - arm64
+    steps:
+      -
+        name: Setup go
+        uses: actions/setup-go@v2.1.4
+        with:
+          go-version: 1.17.2
+
+      -
+        name: Cache Go modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      -
+        name: Build binary (${{ matrix.}})
+        env:
+          GOOS: ${{ matrix.GOOS }}
+          GOARCH: ${{ matrix.GOARCH }}
+        run: go build -o bin/{{ matrix.GOOS }}-${{ matrix.GOARCH }}
