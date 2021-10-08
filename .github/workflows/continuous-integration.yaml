@@ -98,4 +98,4 @@ jobs:
       -
         name: Build binary
         run: |
-          go build -o $BINARY_NAME
+          go build -o build/ci/$BINARY_NAME ./...
