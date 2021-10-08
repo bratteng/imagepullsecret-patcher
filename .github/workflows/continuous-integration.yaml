@@ -78,8 +78,8 @@ jobs:
             ${{ runner.os }}-go-
 
       -
-        name: Build binary (${{ matrix.}})
+        name: Build binary (${{ matrix.GOOS }}/${{ matrix.GOARCH }})
         env:
           GOOS: ${{ matrix.GOOS }}
           GOARCH: ${{ matrix.GOARCH }}
-        run: go build -o bin/{{ matrix.GOOS }}-${{ matrix.GOARCH }}
+        run: go build -o bin/${{ matrix.GOOS }}-${{ matrix.GOARCH }}
