@@ -1,4 +1,5 @@
 /cosign*
+/build*
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows,vim,visualstudiocode,go,git
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,windows,vim,visualstudiocode,go,git
