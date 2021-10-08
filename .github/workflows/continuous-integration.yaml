@@ -53,23 +53,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        OS:
-          - ubuntu-20.04
-        GOOS:
-          - linux
+        OS: [ubuntu-20.04]
+        GOOS: [linux]
         GOARCH:
           - amd64
           - arm64
+          - arm
         include:
           -
             OS: ubuntu-20.04
             GOOS: linux
-            GOARCH: arm64
+            GOARCH: arm
             GOARM: 6
           -
             OS: ubuntu-20.04
             GOOS: linux
-            GOARCH: arm64
+            GOARCH: arm
             GOARM: 7
     steps:
       -
