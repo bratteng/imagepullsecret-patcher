@@ -8,16 +8,16 @@ on:
   pull_request:
 
 jobs:
-  lint:
-    runs-on: ubuntu-20.04
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2.3.4
-
-      -
-        name: Lint code
-        uses: golangci/golangci-lint-action@v2.5.2
+#  lint:
+#    runs-on: ubuntu-20.04
+#    steps:
+#      -
+#        name: Checkout
+#        uses: actions/checkout@v2.3.4
+#
+#      -
+#        name: Lint code
+#        uses: golangci/golangci-lint-action@v2.5.2
 
   test:
     runs-on: ubuntu-20.04
