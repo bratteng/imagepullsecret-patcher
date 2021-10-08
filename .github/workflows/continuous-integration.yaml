@@ -59,6 +59,7 @@ jobs:
           - amd64
           - arm64
           - arm
+        GOARM: ['']
         include:
           -
             OS: ubuntu-20.04
