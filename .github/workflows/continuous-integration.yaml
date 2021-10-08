@@ -48,7 +48,7 @@ jobs:
         run: go test --bench --benchmem -v
 
   build:
-    name: build (${{ matrix.GOOS }}/${{ matrix.GOARCH }})
+    name: build (${{ matrix.GOOS }}/${{ matrix.GOARCH }}${{ matrix.GOARM }})
     runs-on: ${{ matrix.OS }}
     strategy:
       fail-fast: false
