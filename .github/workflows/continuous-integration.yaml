@@ -45,7 +45,9 @@ jobs:
 
       -
         name: Test and Benchmark
-        run: go test --bench --benchmem -v
+        run: |
+          go test --bench --benchmem -v
+          go vet
 
   build:
     name: build (${{ matrix.GOOSARCH }})
