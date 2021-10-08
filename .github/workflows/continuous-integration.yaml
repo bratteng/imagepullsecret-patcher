@@ -60,6 +60,17 @@ jobs:
         GOARCH:
           - amd64
           - arm64
+        include:
+          -
+            OS: ubuntu-20.04
+            GOOS: linux
+            GOARCH: arm64
+            GOARM: 6
+          -
+            OS: ubuntu-20.04
+            GOOS: linux
+            GOARCH: arm64
+            GOARM: 7
     steps:
       -
         name: Checkout
