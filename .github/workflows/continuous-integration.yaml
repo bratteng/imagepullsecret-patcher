@@ -48,30 +48,30 @@ jobs:
         run: go test --bench --benchmem -v
 
   build:
-    name: build (${{ matrix.GOOS }}/${{ matrix.GOARCH }}${{ matrix.GOARM }})
-    runs-on: ${{ matrix.OS }}
+    name: build (${{ matrix.GOOSARCH }})
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        OS: [ubuntu-20.04]
-        GOOS: [linux]
-        GOARCH:
-          - amd64
-          - arm64
-          - arm
-        GOARM: ['']
-        include:
-          -
-            OS: ubuntu-20.04
-            GOOS: linux
-            GOARCH: arm
-            GOARM: 6
-          -
-            OS: ubuntu-20.04
-            GOOS: linux
-            GOARCH: arm
-            GOARM: 7
+        GOOSARCH:
+          - linux/amd64
+          - linux/arm64
+          - darwin/amd64
+          - darwin/arm64
+          - windows/amd64
+          - windows/arm64
     steps:
+      -
+        name: Get GOOS and GOARCH
+        run: |
+          GOOSARCH=${{matrix.goosarch}}
+          GOOS=${GOOSARCH%/*}
+          GOARCH=${GOOSARCH#*/}
+          BINARY_NAME=${{github.repository}}-$GOOS-$GOARCH
+          echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
+          echo "GOOS=$GOOS" >> $GITHUB_ENV
+          echo "GOARCH=$GOARCH" >> $GITHUB_ENV
+
       -
         name: Checkout
         uses: actions/checkout@v2.3.4
@@ -94,9 +94,6 @@ jobs:
             ${{ runner.os }}-go-
 
       -
-        name: Build binary (${{ matrix.GOOS }}/${{ matrix.GOARCH }})
-        env:
-          GOOS: ${{ matrix.GOOS }}
-          GOARCH: ${{ matrix.GOARCH }}
-          GOARM: ${{ matrix.GOARM }}
-        run: go build -o bin/${{ matrix.GOOS }}-${{ matrix.GOARCH }}${{ matrix.GOARM }}
+        name: Build binary
+        run: |
+          go build -o $BINARY_NAME
