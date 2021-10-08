@@ -98,4 +98,5 @@ jobs:
         env:
           GOOS: ${{ matrix.GOOS }}
           GOARCH: ${{ matrix.GOARCH }}
-        run: go build -o bin/${{ matrix.GOOS }}-${{ matrix.GOARCH }}
+          GOARM: ${{ matrix.GOARM }}
+        run: go build -o bin/${{ matrix.GOOS }}-${{ matrix.GOARCH }}${{ matrix.GOARM }}
