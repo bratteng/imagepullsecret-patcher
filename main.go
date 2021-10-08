@@ -65,7 +65,7 @@ func main() {
 
 	// Validate input, as both of these being configured would have undefined behavior.
 	if configDockerconfigjson != "" && configDockerConfigJSONPath != "" {
-		log.Panic(fmt.Errorf("Cannot specify both `configdockerjson` and `configdockerjsonpath`"))
+		log.Panic(fmt.Errorf("cannot specify both `configdockerjson` and `configdockerjsonpath`"))
 	}
 
 	// create k8s clientset from in-cluster config
