@@ -11,8 +11,8 @@ COPY cmd ./cmd/
 RUN go build -o /go/bin/imagepullsecret-patcher ./...
 
 # final stage
-FROM scratch
+FROM gcr.io/distroless/base
 
 COPY --from=builder /go/bin/imagepullsecret-patcher /
 
-CMD ["/imagepullsecret-patcher"]
+ENTRYPOINT ["/imagepullsecret-patcher"]
