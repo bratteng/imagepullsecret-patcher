@@ -94,6 +94,11 @@ jobs:
           cosign sign -key cosign.key ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
 
       -
+        name: Verify image
+        run: |
+          cosign verify -key tools/release-cosign.pub ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+
+      -
         name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
