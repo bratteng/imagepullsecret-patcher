@@ -1,0 +1,36 @@
+name: release
+
+on:
+  push:
+    branches:
+      - main
+      - release-*
+  pull_request:
+
+jobs:
+  verify-base-image:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platforms:
+          - linux/amd64
+          - linux/arm64
+          - linux/arm/v7
+          - linux/arm/v6
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      -
+        name: Install cosign
+        uses: sigstore/cosign-installer@v1.2.0
+
+      -
+        name: Verify base image
+        run: |
+          cosign dockerfile verify \
+            -base-image-only \
+            -key https://raw.githubusercontent.com/GoogleContainerTools/distroless/main/cosign.pub \
+            Dockerfile
