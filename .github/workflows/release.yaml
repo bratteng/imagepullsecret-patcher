@@ -91,7 +91,7 @@ jobs:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
         run: |
           echo "${{ secrets.COSIGN_KEY }}" > cosign.key
-          cosign sign -key cosign.key ghcr.io/${{ github.repository }}@{{ steps.build.digest }}
+          cosign sign -key cosign.key ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
 
       -
         name: Move cache
