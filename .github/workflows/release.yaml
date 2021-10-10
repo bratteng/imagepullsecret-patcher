@@ -10,14 +10,6 @@ on:
 jobs:
   verify-base-image:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platforms:
-          - linux/amd64
-          - linux/arm64
-          # - linux/arm/v7
-          # - linux/arm/v6
     steps:
       -
         name: Checkout
