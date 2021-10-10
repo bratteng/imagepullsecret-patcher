@@ -11,7 +11,6 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
-	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -142,13 +141,13 @@ func startInformers(k8s *k8sClient) {
 
 	secretInformer.AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
-			secret := obj.(*v1.Secret)
+			secret := obj.(*corev1.Secret)
 			if secret.Name == configSecretName && secret.Namespace == configSecretNamespace {
 				log.Debugf("Original secret [%s] in namespace [%s]", secret.Name, secret.Namespace)
 			}
 		},
 		DeleteFunc: func(obj interface{}) {
-			secret := obj.(*v1.Secret)
+			secret := obj.(*corev1.Secret)
 			if secret.Name == configSecretName && secret.Namespace != configSecretNamespace {
 				log.Debugf("Deleted secret [%s] in namespace [%s]", secret.Name, secret.Namespace)
 				var err error
@@ -183,7 +182,7 @@ func startInformers(k8s *k8sClient) {
 			}
 		},
 		UpdateFunc: func(oldObj, newObj interface{}) {
-			secret := oldObj.(*v1.Secret)
+			secret := oldObj.(*corev1.Secret)
 			if secret.Name == configSecretName && secret.Namespace == configSecretNamespace {
 				log.Debugf("Updated secret [%s] in namespace [%s]", secret.Name, secret.Namespace)
 				log.Debug("Running update loop")
