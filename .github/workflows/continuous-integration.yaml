@@ -64,7 +64,14 @@ jobs:
           - windows/arm64
     steps:
       -
+        name: Setup go
+        uses: actions/setup-go@v2.1.4
+        with:
+          go-version: 1.17.2
+
+      -
         name: Get GOOS and GOARCH
+        id: goosarch
         run: |
           GOOSARCH=${{matrix.goosarch}}
           GOOS=${GOOSARCH%/*}
@@ -74,26 +81,27 @@ jobs:
           echo "GOOS=$GOOS" >> $GITHUB_ENV
           echo "GOARCH=$GOARCH" >> $GITHUB_ENV
 
+          echo "::set-output name=goos::$GOOS"
+          echo "::set-output name=goarch::$GOARCH"
+          echo "::set-output name=go-build::$(go env GOCACHE)"
+          echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+
       -
         name: Checkout
         uses: actions/checkout@v2.3.4
-
-      -
-        name: Setup go
-        uses: actions/setup-go@v2.1.4
-        with:
-          go-version: 1.17.2
 
       -
         name: Cache Go modules
         uses: actions/cache@v2
         with:
           path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+            ${{ steps.goosarch.outputs.go-build }}
+            ${{ steps.goosarch.outputs.go-mod }}
+          key: ${{ runner.os }}-${{ steps.goosarch.outputs.goos }}-${{ steps.goosarch.outputs.goarch }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-go-
+            ${{ runner.os }}-${{ steps.goosarch.outputs.goos }}-${{ steps.goosarch.outputs.goarch }}-go-
+            ${{ runner.os }}-${{ steps.goosarch.outputs.goos }}-${{ steps.goosarch.outputs.goarch }}-
+            ${{ runner.os }}-${{ steps.goosarch.outputs.goos }}-
 
       -
         name: Build binary
