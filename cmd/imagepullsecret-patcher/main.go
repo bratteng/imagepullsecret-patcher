@@ -152,8 +152,9 @@ func startInformers(k8s *k8sClient) {
 			if secret.Name == configSecretName && secret.Namespace != configSecretNamespace {
 				log.Debugf("Deleted secret [%s] in namespace [%s]", secret.Name, secret.Namespace)
 				var err error
+				ctx := context.Background()
 				namespace := secret.Namespace
-				namespaceObj, err := k8s.clientset.CoreV1().Namespaces().Get(namespace, metav1.GetOptions{})
+				namespaceObj, err := k8s.clientset.CoreV1().Namespaces().Get(ctx, namespace, metav1.GetOptions{})
 				if err != nil {
 					log.Panic(err)
 				}
@@ -219,9 +220,10 @@ func startInformers(k8s *k8sClient) {
 		AddFunc: func(obj interface{}) {
 			// var err error
 			sa := obj.(*corev1.ServiceAccount)
+			ctx := context.Background()
 			serviceAccount := sa.Name
 			namespace := sa.Namespace
-			namespaceObj, err := k8s.clientset.CoreV1().Namespaces().Get(namespace, metav1.GetOptions{})
+			namespaceObj, err := k8s.clientset.CoreV1().Namespaces().Get(ctx, namespace, metav1.GetOptions{})
 			if err != nil {
 				log.Panic(err)
 			}
