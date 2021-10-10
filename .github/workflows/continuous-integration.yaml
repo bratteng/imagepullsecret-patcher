@@ -65,6 +65,7 @@ jobs:
     steps:
       -
         name: Get GOOS and GOARCH
+        id: goosarch
         run: |
           GOOSARCH=${{matrix.goosarch}}
           GOOS=${GOOSARCH%/*}
@@ -73,6 +74,9 @@ jobs:
           echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
           echo "GOOS=$GOOS" >> $GITHUB_ENV
           echo "GOARCH=$GOARCH" >> $GITHUB_ENV
+
+          echo "::set-output name=goos::$GOOS"
+          echo "::set-output name=goarch::$GOARCH"
 
       -
         name: Checkout
@@ -85,15 +89,23 @@ jobs:
           go-version: 1.17.2
 
       -
+        id: go-cache-paths
+        run: |
+          echo "::set-output name=go-build::$(go env GOCACHE)"
+          echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+
+      -
         name: Cache Go modules
         uses: actions/cache@v2
         with:
           path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+            ${{ steps.go-cache-paths.outputs.go-build }}
+            ${{ steps.go-cache-paths.outputs.go-mod }}
+          key: ${{ runner.os }}-${{ steps.goosarch.outputs.goos }}-${{ steps.goosarch.outputs.goarch }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-go-
+            ${{ runner.os }}-${{ steps.goosarch.outputs.goos }}-${{ steps.goosarch.outputs.goarch }}-go-
+            ${{ runner.os }}-${{ steps.goosarch.outputs.goos }}-${{ steps.goosarch.outputs.goarch }}-
+            ${{ runner.os }}-${{ steps.goosarch.outputs.goos }}-
 
       -
         name: Build binary
