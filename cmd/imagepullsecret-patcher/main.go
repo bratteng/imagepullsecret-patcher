@@ -169,12 +169,6 @@ func startNamespaceWatcher(k8s *k8sClient) {
 func loop(k8s *k8sClient) {
 	var err error
 
-	// Populate secret value to set
-	dockerConfigJSON, err = getDockerConfigJSON()
-	if err != nil {
-		log.Panic(err)
-	}
-
 	ctx := context.Background()
 
 	// get all namespaces
