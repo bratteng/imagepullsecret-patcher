@@ -1,5 +1,5 @@
 # build stage
-FROM golang:1.17.2 as builder
+FROM golang:1.17.5 as builder
 WORKDIR /go/src/github.com/bratteng/imagepullsecret-patcher/
 
 COPY go.mod .
